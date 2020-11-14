@@ -16,7 +16,6 @@ public class ScreenConverter {
     public ScreenPoint r2s(RealPoint p) {
         double x = (p.getX() - cornerX) * screenW / realW;
         double y = (cornerY - p.getY()) * screenH / realH;
-//        System.out.println(p.getX() + " " + p.getY() + " + " + x + " " + y);
         return new ScreenPoint((int) x, (int) y);
     }
 

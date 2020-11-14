@@ -11,7 +11,6 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 
     private Diagram diagram;
     private int candleWidth = this.getWidth() / 60;
-
     //private int border = 30;
 
     DrawPanel() {
@@ -23,7 +22,6 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 
         diagram = new Diagram();
         diagram.createDiagram();
-        //diagram.printCandles();
     }
 
     private void drawOY(LineDrawer ld) {

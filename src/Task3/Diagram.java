@@ -7,15 +7,11 @@ public class Diagram {
     private List<Candle> candles = new ArrayList<>();
 
     public Diagram() {
-//        candles = new ArrayList<>();
-//        candles.add(new Candle());
+
     }
 
     public void createDiagram() {
-        int[] c1 = {20, 35, 5, 30};
-        int[] c2 = {10, 35, 5, 25};
-        //candles.add(new Candle(c1));
-        //candles.add(new Candle(c2));
+
         candles.add(new Candle(10, 50, 10, 50));
         candles.add(new Candle(50, 30, 10, 60));
         candles.add(new Candle(30, 35, 20, 40));
@@ -37,15 +33,6 @@ public class Diagram {
         candles.add(new Candle(-30, 10, -30, 20));
         candles.add(new Candle(10, 50, 10, 50));
     }
-
-    /*
-    public void randomDiagram(int size){
-        for (int i = 0; i < size; i++) {
-            candles.add(new Candle());
-        }
-    }
-
-     */
 
     public void printCandles() {
         int i = 1;

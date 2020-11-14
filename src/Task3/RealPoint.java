@@ -1,10 +1,10 @@
 package Task3;
 
 public class RealPoint {
-    //хранит описание некоторой точки в сист коорд реал мира
+
     private double x, y;
 
-    //alt+insert
+
     public RealPoint(double x, double y) {
         this.x = x;
         this.y = y;
