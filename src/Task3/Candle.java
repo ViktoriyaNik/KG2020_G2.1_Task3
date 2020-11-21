@@ -13,4 +13,20 @@ public class Candle {
     public double[] getArrPoints() {
         return arrPoints;
     }
+
+    public double getStart(){
+        return arrPoints[0];
+    }
+
+    public double getEnd(){
+        return arrPoints[3];
+    }
+
+    public double getMax(){
+        return arrPoints[1];
+    }
+
+    public double getMin(){
+        return arrPoints[2];
+    }
 }

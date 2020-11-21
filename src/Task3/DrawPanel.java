@@ -4,13 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class DrawPanel extends JPanel implements MouseMotionListener, MouseListener, MouseWheelListener, KeyListener {
     private ScreenConverter sc = new ScreenConverter(
             -10, 140, 200, 200, 800, 600);
 
-    private Diagram diagram;
+    private ArrayList<Diagram> diagram;
     private int candleWidth = this.getWidth() / 60;
+    private int count = 0;
+    private int maxCount = 0;
     //private int border = 30;
 
     DrawPanel() {
@@ -20,13 +23,14 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
         this.addKeyListener(this);
         this.setFocusable(true);
 
-        diagram = new Diagram();
-        diagram.createDiagram();
+        diagram = new ArrayList<>();
+        diagram.add(new Diagram());
+        diagram.get(count).createStartDiagram();
     }
 
     private void drawOY(LineDrawer ld) {
-        double min = diagram.getMinCandle();
-        double max = diagram.getMaxCandle();
+        double min = diagram.get(count).getMinCandle();
+        double max = diagram.get(count).getMaxCandle();
 
         ScreenPoint sP1 = new ScreenPoint(10, 0);
         ScreenPoint sP2 = new ScreenPoint(10, getHeight());
@@ -69,11 +73,11 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
     }
 
     private void drawDiagram(LineDrawer ld) {
-        int count = diagram.getCandles().size();
+        int c = diagram.get(count).getCandles().size();
         candleWidth = getWidth() / 60;
         int xDel = 0;
-        drawXY(ld, candleWidth, count, xDel);
-        DrawLogic.drawDiagram(ld, sc, diagram, 0, candleWidth);
+        drawXY(ld, candleWidth, c, xDel);
+        DrawLogic.drawDiagram(ld, sc, diagram.get(count), 0, candleWidth);
     }
 
     @Override
@@ -103,40 +107,22 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
     private ScreenPoint prevPoint = null;
 
     @Override
-    public void mouseDragged(MouseEvent mouseEvent) {
-        /*
-        if (SwingUtilities.isRightMouseButton(mouseEvent)) {
-            double bot = diagram.getMinCandle();
-            double top = diagram.getMaxCandle();
-            ScreenPoint p1 = sc.r2s(new RealPoint(0, bot));
-            ScreenPoint p2 = sc.r2s(new RealPoint(0, top));
-            ScreenPoint currentPoint = new ScreenPoint(mouseEvent.getX(), mouseEvent.getY());
-            if (!((p1.getY() <= this.getHeight() - border || currentPoint.getY() < prevPoint.getY())
-                    && (p2.getY() >= border || currentPoint.getY() > prevPoint.getY()))) {
-                currentPoint = new ScreenPoint(currentPoint.getX(), prevPoint.getY());
-            }
-            if (!(p1.getX() <= candleWidth * 2 || currentPoint.getX() < prevPoint.getX())) {
-                currentPoint = new ScreenPoint(prevPoint.getX(), currentPoint.getY());
-            }
-            if (prevPoint != null) {
-                ScreenPoint deltaScreen = new ScreenPoint(
-                        currentPoint.getX() - prevPoint.getX(),
-                        currentPoint.getY() - prevPoint.getY()
-                );
-                RealPoint deltaReal = sc.s2r(deltaScreen);
+    public void mouseDragged(MouseEvent e) {
+        ScreenPoint currentPoint = new ScreenPoint(e.getX(), e.getY());
+        if (prevPoint != null) {
+            ScreenPoint deltaScreen = new ScreenPoint(
+                    currentPoint.getX() - prevPoint.getX(),
+                    currentPoint.getY() - prevPoint.getY()
+            );
+            RealPoint deltaReal = sc.s2r(deltaScreen);
+            double vectorX = deltaReal.getX() - sc.getCornerX();
+            double vectorY = deltaReal.getY() - sc.getCornerY();
 
-                double vectorX = deltaReal.getX() - sc.getCornerX();
-                double vectorY = deltaReal.getY() - sc.getCornerY();
-
-                sc.setCornerX(sc.getCornerX() - vectorX);
-                sc.setCornerY(sc.getCornerY() - vectorY);
-                prevPoint = currentPoint;
-            }
-            repaint();
-
+            sc.setCornerX(sc.getCornerX() - vectorX);
+            sc.setCornerY(sc.getCornerY() - vectorY);
+            prevPoint = currentPoint;
         }
-
-         */
+        repaint();
     }
 
     @Override
@@ -192,14 +178,27 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getKeyCode() == 37) {
+            if(diagram.get(count).getCandles().size()<=1){
+                return;
+            }
+            if (count + 1 > maxCount) {
+                diagram.add(new Diagram());
+                count++;
+                maxCount++;
+                diagram.get(count).createDiagram(diagram.get(count - 1).getCandles());
+            } else{
+                count++;
+            }
+            repaint();
+        } else if (keyEvent.getKeyCode() == 39 && count > 0) {
+            count--;
+            repaint();
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        if (keyEvent.getKeyCode() == 127) {
-            diagram = new Diagram();
-            diagram.createDiagram();
-            repaint();
-        }
+
     }
 }

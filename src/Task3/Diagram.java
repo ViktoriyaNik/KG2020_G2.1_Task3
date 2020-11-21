@@ -10,7 +10,15 @@ public class Diagram {
 
     }
 
-    public void createDiagram() {
+    public void createDiagram(List<Candle> candle) {
+        for (int i = 0; i < candle.size() - 1; i += 2) {
+            Candle c1 = candle.get(i);
+            Candle c2 = candle.get(i + 1);
+            candles.add(new Candle(c1.getStart(), c2.getEnd(), Math.max(c1.getMax(), c2.getMax()), Math.min(c1.getMin(), c2.getMin())));
+        }
+    }
+
+    public void createStartDiagram() {
 
         candles.add(new Candle(10, 50, 10, 50));
         candles.add(new Candle(50, 30, 10, 60));
@@ -22,6 +30,7 @@ public class Diagram {
         candles.add(new Candle(-20, 50, -10, 50));
         candles.add(new Candle(50, 70, 10, 80));
         candles.add(new Candle(70, 10, -15, 75));
+
         candles.add(new Candle(10, 15, 0, 40));
         candles.add(new Candle(15, 40, -10, 50));
         candles.add(new Candle(40, 80, 30, 80));
@@ -32,6 +41,8 @@ public class Diagram {
         candles.add(new Candle(20, -30, -40, 50));
         candles.add(new Candle(-30, 10, -30, 20));
         candles.add(new Candle(10, 50, 10, 50));
+
+        //candles.add(new Candle(10, 50, 10, 50));
     }
 
     public void printCandles() {
