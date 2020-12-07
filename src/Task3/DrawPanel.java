@@ -186,7 +186,7 @@ public class DrawPanel extends JPanel implements MouseMotionListener, MouseListe
                 diagram.add(new Diagram());
                 count++;
                 maxCount++;
-                diagram.get(count).createDiagram(diagram.get(count - 1).getCandles());
+                diagram.get(count).group(diagram.get(count - 1).getCandles(), 3);
             } else{
                 count++;
             }

@@ -10,6 +10,26 @@ public class Diagram {
 
     }
 
+    public void group(List<Candle> candle, int n){
+        for (int i = 0; i < candle.size() - 1; i += n) {
+            double min = candle.get(i).getMin();
+            double max = candle.get(i).getMax();
+            for (int j = 0; j < n && i + j < candle.size(); j++) {
+                if(candle.get(i+j).getMin()<min){
+                    min = candle.get(i+j).getMin();
+                }
+                if(candle.get(i+j).getMax()>max){
+                    max = candle.get(i+j).getMax();
+                }
+            }
+            if(i+n<candle.size()) {
+                candles.add(new Candle(candle.get(i).getStart(), candle.get(i + n - 1).getEnd(), max, min));
+            } else{
+                candles.add(new Candle(candle.get(i).getStart(), candle.get(candle.size() - 1).getEnd(), max, min));
+            }
+        }
+    }
+
     public void createDiagram(List<Candle> candle) {
         for (int i = 0; i < candle.size() - 1; i += 2) {
             Candle c1 = candle.get(i);
